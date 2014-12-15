@@ -1,0 +1,3 @@
+[submodule "modules/Funcational-Java"]
+	path = modules/Funcational-Java
+	url = git@github.com:qoncept/Funcational-Java.git

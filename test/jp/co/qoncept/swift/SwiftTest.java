@@ -2,18 +2,139 @@ package jp.co.qoncept.swift;
 
 import static jp.co.qoncept.swift.Swift.as;
 import static jp.co.qoncept.swift.Swift.asq;
+import static jp.co.qoncept.swift.Swift.filter;
+import static jp.co.qoncept.swift.Swift.map;
 import static jp.co.qoncept.swift.Swift.q;
 import static jp.co.qoncept.swift.Swift.qq;
+import static jp.co.qoncept.swift.Swift.reduce;
 import static jp.co.qoncept.swift.Swift.x;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jp.co.qoncept.functional.BiFunction;
 import jp.co.qoncept.functional.Function;
+import jp.co.qoncept.functional.Predicate;
 
 import org.junit.Test;
 
 public class SwiftTest {
+	@Test
+	public void testMap() {
+		{
+			// let result = ["123", "456", "789"].map { $0.toInt()! }
+			List<Integer> result = map(Arrays.asList("123", "456", "789"),
+					new Function<String, Integer>() {
+						@Override
+						public Integer apply(String t) {
+							return Integer.parseInt(t);
+						}
+					});
+			assertEquals(Arrays.asList(123, 456, 789), result);
+		}
+
+		{
+			Map<Character, Integer> characterToInteger = new HashMap<Character, Integer>();
+			characterToInteger.put('A', 1);
+			characterToInteger.put('B', 2);
+			characterToInteger.put('C', 3);
+
+			List<String> result = map(characterToInteger,
+					new Function<Map.Entry<Character, Integer>, String>() {
+						@Override
+						public String apply(Map.Entry<Character, Integer> t) {
+							StringBuilder builder = new StringBuilder();
+							for (int i = 0; i < t.getValue(); i++) {
+								builder.append(t.getKey());
+							}
+
+							return builder.toString();
+						}
+					});
+			assertEquals(Arrays.asList("A", "BB", "CCC"), result);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFilter() {
+		{
+			// let result = [123, 456, 789].filter { $0 % 2 == 1 }
+			List<Integer> result = filter(Arrays.asList(123, 456, 789),
+					new Predicate<Integer>() {
+						@Override
+						public boolean test(Integer t) {
+							return t % 2 == 1;
+						}
+					});
+			assertEquals(Arrays.asList(123, 789), result);
+		}
+
+		{
+			Map<String, Integer> stringToInteger = new HashMap<String, Integer>();
+			stringToInteger.put("a", 1);
+			stringToInteger.put("bc", 0);
+			stringToInteger.put("def", 3);
+
+			List<Map.Entry<String, Integer>> result = filter(stringToInteger,
+					new Predicate<Map.Entry<String, Integer>>() {
+						@Override
+						public boolean test(Map.Entry<String, Integer> t) {
+							return t.getKey().length() == t.getValue();
+						}
+					});
+			assertEquals(Arrays.asList(
+					new SimpleEntry<String, Integer>("a", 1),
+					new SimpleEntry<String, Integer>("def", 3)), result);
+		}
+	}
+
+	@Test
+	public void testReduce() {
+		{
+			// let result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce(0) { $0 + $1 }
+			Integer result = reduce(
+					Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 0,
+					new BiFunction<Integer, Integer, Integer>() {
+						@Override
+						public Integer apply(Integer t, Integer u) {
+							return t + u;
+						}
+					});
+			assertEquals(new Integer(55), result);
+		}
+
+		{
+			Map<Character, Integer> characterToInteger = new HashMap<Character, Integer>();
+			characterToInteger.put('A', 1);
+			characterToInteger.put('B', 2);
+			characterToInteger.put('C', 3);
+
+			String result = reduce(
+					characterToInteger,
+					"",
+					new BiFunction<String, Map.Entry<Character, Integer>, String>() {
+						@Override
+						public String apply(String t,
+								Map.Entry<Character, Integer> u) {
+							StringBuilder builder = new StringBuilder();
+							for (int i = 0; i < u.getValue(); i++) {
+								builder.append(u.getKey());
+							}
+
+							return t + builder.toString();
+						}
+					});
+			assertEquals("ABBCCC", result);
+		}
+	}
+
 	@Test
 	public void testAs() {
 		{
@@ -60,7 +181,7 @@ public class SwiftTest {
 	public void testQ() {
 		{
 			// let s: String? = "abc"
-			// let l = s?.length
+			// let l = s?.utf16Count
 			String s = "abc";
 			Integer l = q(s, new Function<String, Integer>() {
 				@Override
@@ -73,7 +194,7 @@ public class SwiftTest {
 
 		{
 			// let s: String? = nil
-			// let l = s?.length
+			// let l = s?.utf16Count
 			String s = null;
 			Integer l = q(s, new Function<String, Integer>() {
 				@Override
@@ -134,5 +255,53 @@ public class SwiftTest {
 
 	private static class Cat extends Animal {
 
+	}
+
+	private static class SimpleEntry<K, V> implements Map.Entry<K, V> {
+		private K key;
+		private V value;
+
+		public SimpleEntry(K key, V value) {
+			super();
+			this.key = key;
+			this.value = value;
+		}
+
+		@Override
+		public K getKey() {
+			return key;
+		}
+
+		@Override
+		public V getValue() {
+			return value;
+		}
+
+		@Override
+		public V setValue(V value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int hashCode() {
+			return (getKey() == null ? 0 : getKey().hashCode())
+					^ (getValue() == null ? 0 : getValue().hashCode());
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Map.Entry)) {
+				return false;
+			}
+
+			Map.Entry<K, V> e1 = this;
+			Map.Entry<K, V> e2 = (Map.Entry<K, V>) obj;
+
+			return (e1.getKey() == null ? e2.getKey() == null : e1.getKey()
+					.equals(e2.getKey()))
+					&& (e1.getValue() == null ? e2.getValue() == null : e1
+							.getValue().equals(e2.getValue()));
+		}
 	}
 }

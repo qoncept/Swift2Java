@@ -146,7 +146,7 @@ public class SwiftTest {
 		}
 
 		{
-			// let animal: Animal = nil
+			// let animal: Animal? = nil
 			// let cat = animal as Cat
 			Animal animal = null;
 			try {
@@ -211,7 +211,7 @@ public class SwiftTest {
 	public void testX() {
 		{
 			// let s: String? = "abc"
-			// let l = s!
+			// let t = s!
 			String s = "abc";
 			String t = x(s);
 			assertEquals(t, "abc");
@@ -219,7 +219,7 @@ public class SwiftTest {
 
 		{
 			// let s: String? = nil
-			// let l = s!
+			// let t = s!
 			String s = null;
 			try {
 				@SuppressWarnings("unused")

@@ -85,7 +85,7 @@ Cat cat = as(animal, Cat.class); // the created Cat object
 
 ```swift
 // Swift
-let animal: Animal = nil
+let animal: Animal? = nil
 let cat = animal as Cat
 ```
 
@@ -172,14 +172,14 @@ Integer l = q(s, new Function<String, Integer>() {
 
 ```swift
 // Swift
-let s = "abc"
-let r = s ?? "xyz"
+let s: String? = "abc"
+let t = s!
 ```
 
 ```java
 // Java
 String s = "abc";
-String r = qq(s, "xyz");
+String t = x(s);
 ```
 
 #### (B)
@@ -187,7 +187,7 @@ String r = qq(s, "xyz");
 ```swift
 // Swift
 let s: String? = nil
-let l = s!
+let t = s!
 ```
 
 ```java

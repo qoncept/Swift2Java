@@ -61,7 +61,6 @@ public class SwiftTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testFilter() {
 		{

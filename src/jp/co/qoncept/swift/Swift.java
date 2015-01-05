@@ -13,14 +13,15 @@ public class Swift {
 	}
 
 	public static <T, R> List<R> map(Iterable<T> source,
-			Function<T, R> transform) {
-		List<R> result = new ArrayList<R>();
-
-		for (T element : source) {
-			result.add(transform.apply(element));
-		}
-
-		return result;
+			final Function<T, R> transform) {
+		return reduce(source, new ArrayList<R>(),
+				new BiFunction<List<R>, T, List<R>>() {
+					@Override
+					public List<R> apply(List<R> result, T element) {
+						result.add(transform.apply(element));
+						return result;
+					}
+				});
 	}
 
 	public static <K, V, R> List<R> map(Map<K, V> source,
@@ -29,16 +30,17 @@ public class Swift {
 	}
 
 	public static <T> List<T> filter(Iterable<T> source,
-			Predicate<T> includeElement) {
-		List<T> result = new ArrayList<T>();
-
-		for (T element : source) {
-			if (includeElement.test(element)) {
-				result.add(element);
-			}
-		}
-
-		return result;
+			final Predicate<T> includeElement) {
+		return reduce(source, new ArrayList<T>(),
+				new BiFunction<List<T>, T, List<T>>() {
+					@Override
+					public List<T> apply(List<T> result, T element) {
+						if (includeElement.test(element)) {
+							result.add(element);
+						}
+						return result;
+					}
+				});
 	}
 
 	public static <K, V> List<Map.Entry<K, V>> filter(Map<K, V> source,

@@ -84,6 +84,11 @@ public class Swift {
 					public Tuple2<Integer, ? extends T> next() {
 						return new Tuple2<Integer, T>(index++, iterator.next());
 					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException("remove");
+					}
 				};
 			}
 		};

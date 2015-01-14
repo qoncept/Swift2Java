@@ -17,10 +17,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import jp.co.qoncept.functional.BiFunction;
@@ -67,6 +70,7 @@ public class SwiftTest {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testFilter() {
 		{
@@ -92,6 +96,14 @@ public class SwiftTest {
 						@Override
 						public boolean test(Map.Entry<String, Integer> t) {
 							return t.getKey().length() == t.getValue();
+						}
+					});
+			Collections.sort(result,
+					new Comparator<Map.Entry<String, Integer>>() {
+						@Override
+						public int compare(Entry<String, Integer> o1,
+								Entry<String, Integer> o2) {
+							return o1.getValue().compareTo(o2.getValue());
 						}
 					});
 			assertEquals(Arrays.asList(

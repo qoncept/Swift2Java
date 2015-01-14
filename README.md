@@ -65,6 +65,23 @@ Integer result = reduce(
     });
 ```
 
+### enumerate
+
+```swift
+// Swift
+for (index, element) in enumerate(["abc", "def", "ghi"]) { 
+    println("\(index): \(element)")
+} 
+```
+
+```java
+// Java
+for (Tuple2<Integer, ? extends String> indexAndElement : enumerate(Arrays
+        .asList("abc", "def", "ghi"))) {
+    System.out.println(indexAndElement.get0() + ": " + indexAndElement.get1());
+}
+```
+
 ### as
 
 #### (A)

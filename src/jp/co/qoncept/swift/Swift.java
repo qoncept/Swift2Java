@@ -1,12 +1,14 @@
 package jp.co.qoncept.swift;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import jp.co.qoncept.functional.BiFunction;
 import jp.co.qoncept.functional.Function;
 import jp.co.qoncept.functional.Predicate;
+import jp.co.qoncept.util.Tuple2;
 
 public class Swift {
 	private Swift() {
@@ -62,6 +64,29 @@ public class Swift {
 	public static <K, V, R> R reduce(Map<K, V> source, R initial,
 			BiFunction<R, Map.Entry<K, V>, R> combine) {
 		return reduce(source.entrySet(), initial, combine);
+	}
+
+	public static <T> Iterable<? extends Tuple2<Integer, ? extends T>> enumerate(
+			final Iterable<? extends T> iterable) {
+		return new Iterable<Tuple2<Integer, ? extends T>>() {
+			@Override
+			public Iterator<Tuple2<Integer, ? extends T>> iterator() {
+				final Iterator<? extends T> iterator = iterable.iterator();
+				return new Iterator<Tuple2<Integer, ? extends T>>() {
+					private int index = 0;
+
+					@Override
+					public boolean hasNext() {
+						return iterator.hasNext();
+					}
+
+					@Override
+					public Tuple2<Integer, ? extends T> next() {
+						return new Tuple2<Integer, T>(index++, iterator.next());
+					}
+				};
+			}
+		};
 	}
 
 	public static <T> T as(Object object, Class<T> clazz)

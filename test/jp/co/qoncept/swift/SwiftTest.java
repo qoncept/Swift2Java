@@ -2,6 +2,7 @@ package jp.co.qoncept.swift;
 
 import static jp.co.qoncept.swift.Swift.as;
 import static jp.co.qoncept.swift.Swift.asq;
+import static jp.co.qoncept.swift.Swift.enumerate;
 import static jp.co.qoncept.swift.Swift.filter;
 import static jp.co.qoncept.swift.Swift.map;
 import static jp.co.qoncept.swift.Swift.q;
@@ -9,18 +10,23 @@ import static jp.co.qoncept.swift.Swift.qq;
 import static jp.co.qoncept.swift.Swift.reduce;
 import static jp.co.qoncept.swift.Swift.x;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import jp.co.qoncept.functional.BiFunction;
 import jp.co.qoncept.functional.Function;
 import jp.co.qoncept.functional.Predicate;
+import jp.co.qoncept.util.Tuple2;
 
 import org.junit.Test;
 
@@ -131,6 +137,48 @@ public class SwiftTest {
 						}
 					});
 			assertEquals("ABBCCC", result);
+		}
+	}
+
+	@Test
+	public void testEnumerate() {
+		Iterable<? extends Tuple2<Integer, ? extends String>> iterable = enumerate(Arrays
+				.asList("abc", "def", "ghi"));
+		Iterator<? extends Tuple2<Integer, ? extends String>> iterator = iterable
+				.iterator();
+
+		{ // 0
+			assertTrue(iterator.hasNext());
+
+			Tuple2<Integer, ? extends String> element = iterator.next();
+			assertEquals(0, element.get0().intValue());
+			assertEquals("abc", element.get1());
+		}
+
+		{ // 1
+			assertTrue(iterator.hasNext());
+
+			Tuple2<Integer, ? extends String> element = iterator.next();
+			assertEquals(1, element.get0().intValue());
+			assertEquals("def", element.get1());
+		}
+
+		{ // 2
+			assertTrue(iterator.hasNext());
+
+			Tuple2<Integer, ? extends String> element = iterator.next();
+			assertEquals(2, element.get0().intValue());
+			assertEquals("ghi", element.get1());
+		}
+
+		{ // no more element
+			assertFalse(iterator.hasNext());
+
+			try {
+				iterator.next();
+				fail("Must throw an exception.");
+			} catch (NoSuchElementException e) {
+			}
 		}
 	}
 

@@ -143,6 +143,36 @@ Animal animal = null;
 Cat cat = asq(animal, Cat.class); // null
 ```
 
+### is
+
+#### (A)
+
+```swift
+// Swift
+let animal: Animal? = Cat()
+let result = animal is Cat
+```
+
+```java
+// Java
+Animal animal = new Cat();
+boolean result = is(animal, Cat.class); // true
+```
+
+#### (B)
+
+```swift
+// Swift
+let animal: Animal? = nil
+let result = animal is Cat
+```
+
+```java
+// Java
+Animal animal = new Cat();
+boolean result = is(animal, Cat.class); // false
+```
+
 ### ? (Optional Chain)
 
 #### (A)

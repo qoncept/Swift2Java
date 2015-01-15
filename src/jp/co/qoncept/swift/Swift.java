@@ -111,6 +111,14 @@ public class Swift {
 		}
 	}
 
+	public static <T> boolean is(Object object, Class<T> clazz) {
+		if (object == null) {
+			return false;
+		}
+
+		return clazz.isInstance(object);
+	}
+
 	public static <T, R> R q(T object, Function<T, R> transform) {
 		return object == null ? null : transform.apply(object);
 	}

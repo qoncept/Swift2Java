@@ -4,6 +4,7 @@ import static jp.co.qoncept.swift.Swift.as;
 import static jp.co.qoncept.swift.Swift.asq;
 import static jp.co.qoncept.swift.Swift.enumerate;
 import static jp.co.qoncept.swift.Swift.filter;
+import static jp.co.qoncept.swift.Swift.is;
 import static jp.co.qoncept.swift.Swift.map;
 import static jp.co.qoncept.swift.Swift.q;
 import static jp.co.qoncept.swift.Swift.qq;
@@ -233,6 +234,28 @@ public class SwiftTest {
 			Animal animal = null;
 			Cat cat = asq(animal, Cat.class);
 			assertNull(cat);
+		}
+	}
+
+	public void testIs() {
+		{
+			// let animal: Animal? = Cat()
+			// let result = animal is Cat
+			Animal animal = new Cat();
+			boolean result = is(animal, Cat.class);
+
+			assertTrue(result);
+			assertTrue(animal instanceof Cat);
+		}
+
+		{
+			// let animal: Animal? = nil
+			// let result = animal is Cat
+			Animal animal = new Cat();
+			boolean result = is(animal, Cat.class);
+
+			assertFalse(result);
+			assertTrue(animal instanceof Cat);
 		}
 	}
 

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import jp.co.qoncept.functional.BiFunction;
@@ -55,10 +54,12 @@ public class SwiftTest {
 			characterToInteger.put('B', 2);
 			characterToInteger.put('C', 3);
 
-			List<String> result = map(characterToInteger,
-					new Function<Map.Entry<Character, Integer>, String>() {
+			List<String> result = map(
+					characterToInteger,
+					new Function<Map.Entry<Character, ? extends Integer>, String>() {
 						@Override
-						public String apply(Map.Entry<Character, Integer> t) {
+						public String apply(
+								Map.Entry<Character, ? extends Integer> t) {
 							StringBuilder builder = new StringBuilder();
 							for (int i = 0; i < t.getValue(); i++) {
 								builder.append(t.getKey());
@@ -92,18 +93,21 @@ public class SwiftTest {
 			stringToInteger.put("bc", 0);
 			stringToInteger.put("def", 3);
 
-			List<Map.Entry<String, Integer>> result = filter(stringToInteger,
-					new Predicate<Map.Entry<String, Integer>>() {
+			List<Map.Entry<String, ? extends Integer>> result = filter(
+					stringToInteger,
+					new Predicate<Map.Entry<String, ? extends Integer>>() {
 						@Override
-						public boolean test(Map.Entry<String, Integer> t) {
+						public boolean test(
+								Map.Entry<String, ? extends Integer> t) {
 							return t.getKey().length() == t.getValue();
 						}
 					});
 			Collections.sort(result,
-					new Comparator<Map.Entry<String, Integer>>() {
+					new Comparator<Map.Entry<String, ? extends Integer>>() {
 						@Override
-						public int compare(Entry<String, Integer> o1,
-								Entry<String, Integer> o2) {
+						public int compare(
+								Map.Entry<String, ? extends Integer> o1,
+								Map.Entry<String, ? extends Integer> o2) {
 							return o1.getValue().compareTo(o2.getValue());
 						}
 					});
@@ -137,10 +141,10 @@ public class SwiftTest {
 			String result = reduce(
 					characterToInteger,
 					"",
-					new BiFunction<String, Map.Entry<Character, Integer>, String>() {
+					new BiFunction<String, Map.Entry<Character, ? extends Integer>, String>() {
 						@Override
 						public String apply(String t,
-								Map.Entry<Character, Integer> u) {
+								Map.Entry<Character, ? extends Integer> u) {
 							StringBuilder builder = new StringBuilder();
 							for (int i = 0; i < u.getValue(); i++) {
 								builder.append(u.getKey());

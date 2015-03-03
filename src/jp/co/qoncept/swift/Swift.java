@@ -14,8 +14,8 @@ public class Swift {
 	private Swift() {
 	}
 
-	public static <T, R> List<R> map(Iterable<T> source,
-			final Function<T, R> transform) {
+	public static <T, R> List<R> map(Iterable<? extends T> source,
+			final Function<? super T, ? extends R> transform) {
 		return reduce(source, new ArrayList<R>(),
 				new BiFunction<List<R>, T, List<R>>() {
 					@Override
@@ -26,13 +26,13 @@ public class Swift {
 				});
 	}
 
-	public static <K, V, R> List<R> map(Map<K, V> source,
-			Function<Map.Entry<K, V>, R> transform) {
+	public static <K, V, R> List<R> map(Map<K, ? extends V> source,
+			Function<? super Map.Entry<K, ? extends V>, ? extends R> transform) {
 		return map(source.entrySet(), transform);
 	}
 
-	public static <T> List<T> filter(Iterable<T> source,
-			final Predicate<T> includeElement) {
+	public static <T> List<T> filter(Iterable<? extends T> source,
+			final Predicate<? super T> includeElement) {
 		return reduce(source, new ArrayList<T>(),
 				new BiFunction<List<T>, T, List<T>>() {
 					@Override
@@ -45,13 +45,17 @@ public class Swift {
 				});
 	}
 
-	public static <K, V> List<Map.Entry<K, V>> filter(Map<K, V> source,
-			Predicate<Map.Entry<K, V>> includeElement) {
-		return filter(source.entrySet(), includeElement);
+	@SuppressWarnings("unchecked")
+	public static <K, V> List<Map.Entry<K, ? extends V>> filter(
+			Map<K, ? extends V> source,
+			Predicate<? super Map.Entry<K, ? extends V>> includeElement) {
+		source.entrySet();
+		return (List<Map.Entry<K, ? extends V>>) (List<?>) /* for Java 7 or earlier */
+		filter(source.entrySet(), includeElement);
 	}
 
-	public static <T, R> R reduce(Iterable<T> source, R initial,
-			BiFunction<R, T, R> combine) {
+	public static <T, R> R reduce(Iterable<? extends T> source, R initial,
+			BiFunction<? super R, ? super T, ? extends R> combine) {
 		R result = initial;
 
 		for (T element : source) {
@@ -61,8 +65,10 @@ public class Swift {
 		return result;
 	}
 
-	public static <K, V, R> R reduce(Map<K, V> source, R initial,
-			BiFunction<R, Map.Entry<K, V>, R> combine) {
+	public static <K, V, R> R reduce(
+			Map<K, ? extends V> source,
+			R initial,
+			BiFunction<? super R, ? super Map.Entry<K, ? extends V>, ? extends R> combine) {
 		return reduce(source.entrySet(), initial, combine);
 	}
 
@@ -119,7 +125,8 @@ public class Swift {
 		return clazz.isInstance(object);
 	}
 
-	public static <T, R> R q(T object, Function<T, R> transform) {
+	public static <T, R> R q(T object,
+			Function<? super T, ? extends R> transform) {
 		return object == null ? null : transform.apply(object);
 	}
 

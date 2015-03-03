@@ -26,8 +26,9 @@ public class Swift {
 				});
 	}
 
-	public static <K, V, R> List<R> map(Map<K, ? extends V> source,
-			Function<? super Map.Entry<K, ? extends V>, ? extends R> transform) {
+	public static <K, V, R> List<R> map(
+			Map<? extends K, ? extends V> source,
+			Function<? super Map.Entry<? extends K, ? extends V>, ? extends R> transform) {
 		return map(source.entrySet(), transform);
 	}
 
@@ -46,11 +47,11 @@ public class Swift {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <K, V> List<Map.Entry<K, ? extends V>> filter(
+	public static <K, V> List<Map.Entry<? extends K, ? extends V>> filter(
 			Map<K, ? extends V> source,
-			Predicate<? super Map.Entry<K, ? extends V>> includeElement) {
+			Predicate<? super Map.Entry<? extends K, ? extends V>> includeElement) {
 		source.entrySet();
-		return (List<Map.Entry<K, ? extends V>>) (List<?>) /* for Java 7 or earlier */
+		return (List<Map.Entry<? extends K, ? extends V>>) (List<?>) /* for Java 7 or earlier */
 		filter(source.entrySet(), includeElement);
 	}
 
@@ -66,9 +67,9 @@ public class Swift {
 	}
 
 	public static <K, V, R> R reduce(
-			Map<K, ? extends V> source,
+			Map<? extends K, ? extends V> source,
 			R initial,
-			BiFunction<? super R, ? super Map.Entry<K, ? extends V>, ? extends R> combine) {
+			BiFunction<? super R, ? super Map.Entry<? extends K, ? extends V>, ? extends R> combine) {
 		return reduce(source.entrySet(), initial, combine);
 	}
 

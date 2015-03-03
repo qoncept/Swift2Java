@@ -56,10 +56,10 @@ public class SwiftTest {
 
 			List<String> result = map(
 					characterToInteger,
-					new Function<Map.Entry<Character, ? extends Integer>, String>() {
+					new Function<Map.Entry<? extends Character, ? extends Integer>, String>() {
 						@Override
 						public String apply(
-								Map.Entry<Character, ? extends Integer> t) {
+								Map.Entry<? extends Character, ? extends Integer> t) {
 							StringBuilder builder = new StringBuilder();
 							for (int i = 0; i < t.getValue(); i++) {
 								builder.append(t.getKey());
@@ -93,24 +93,26 @@ public class SwiftTest {
 			stringToInteger.put("bc", 0);
 			stringToInteger.put("def", 3);
 
-			List<Map.Entry<String, ? extends Integer>> result = filter(
+			List<Map.Entry<? extends String, ? extends Integer>> result = filter(
 					stringToInteger,
-					new Predicate<Map.Entry<String, ? extends Integer>>() {
+					new Predicate<Map.Entry<? extends String, ? extends Integer>>() {
 						@Override
 						public boolean test(
-								Map.Entry<String, ? extends Integer> t) {
+								Map.Entry<? extends String, ? extends Integer> t) {
 							return t.getKey().length() == t.getValue();
 						}
 					});
-			Collections.sort(result,
-					new Comparator<Map.Entry<String, ? extends Integer>>() {
-						@Override
-						public int compare(
-								Map.Entry<String, ? extends Integer> o1,
-								Map.Entry<String, ? extends Integer> o2) {
-							return o1.getValue().compareTo(o2.getValue());
-						}
-					});
+			Collections
+					.sort(result,
+							new Comparator<Map.Entry<? extends String, ? extends Integer>>() {
+								@Override
+								public int compare(
+										Map.Entry<? extends String, ? extends Integer> o1,
+										Map.Entry<? extends String, ? extends Integer> o2) {
+									return o1.getValue().compareTo(
+											o2.getValue());
+								}
+							});
 			assertEquals(Arrays.asList(
 					new SimpleEntry<String, Integer>("a", 1),
 					new SimpleEntry<String, Integer>("def", 3)), result);
@@ -141,10 +143,11 @@ public class SwiftTest {
 			String result = reduce(
 					characterToInteger,
 					"",
-					new BiFunction<String, Map.Entry<Character, ? extends Integer>, String>() {
+					new BiFunction<String, Map.Entry<? extends Character, ? extends Integer>, String>() {
 						@Override
-						public String apply(String t,
-								Map.Entry<Character, ? extends Integer> u) {
+						public String apply(
+								String t,
+								Map.Entry<? extends Character, ? extends Integer> u) {
 							StringBuilder builder = new StringBuilder();
 							for (int i = 0; i < u.getValue(); i++) {
 								builder.append(u.getKey());

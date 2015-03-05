@@ -33,11 +33,13 @@ List<Integer> result = map(Arrays.asList("123", "456", "789"),
 #### Optional
 
 ```swift
+// Swift
 let a: Int? = 3
 let result = a.map { $0 * $0 }
 ```
 
 ```java
+// Java
 Integer a = 3;
 Integer result = map(a, new Function<Integer, Integer>() {
     @Override

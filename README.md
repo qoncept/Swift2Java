@@ -12,6 +12,8 @@ import static jp.co.qoncept.swift.Swift.*;
 
 ### map
 
+#### Array
+
 ```swift
 // Swift
 let result = ["123", "456", "789"].map { $0.toInt()! }
@@ -26,6 +28,23 @@ List<Integer> result = map(Arrays.asList("123", "456", "789"),
             return Integer.parseInt(t);
         }
     });
+```
+
+#### Optional
+
+```swift
+let a: Int? = 3
+let result = a.map { $0 * $0 }
+```
+
+```java
+Integer a = 3;
+Integer result = map(a, new Function<Integer, Integer>() {
+    @Override
+    public Integer apply(Integer t) {
+        return t * t;
+    }
+});
 ```
 
 ### filter
@@ -80,6 +99,18 @@ for (Tuple2<Integer, ? extends String> indexAndElement : enumerate(Arrays
         .asList("abc", "def", "ghi"))) {
     System.out.println(indexAndElement.get0() + ": " + indexAndElement.get1());
 }
+```
+
+### +
+
+```swift
+// Swift
+let result = [2, 3] + [5, 7, 11]
+```
+
+```java
+// Java
+List<Integer> result = plus(Arrays.asList(2, 3), Arrays.asList(5, 7, 11));
 ```
 
 ### as

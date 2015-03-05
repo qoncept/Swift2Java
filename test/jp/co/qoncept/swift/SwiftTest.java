@@ -6,6 +6,7 @@ import static jp.co.qoncept.swift.Swift.enumerate;
 import static jp.co.qoncept.swift.Swift.filter;
 import static jp.co.qoncept.swift.Swift.is;
 import static jp.co.qoncept.swift.Swift.map;
+import static jp.co.qoncept.swift.Swift.plus;
 import static jp.co.qoncept.swift.Swift.q;
 import static jp.co.qoncept.swift.Swift.qq;
 import static jp.co.qoncept.swift.Swift.reduce;
@@ -69,6 +70,32 @@ public class SwiftTest {
 						}
 					});
 			assertEquals(Arrays.asList("A", "BB", "CCC"), result);
+		}
+
+		{
+			// let a: Int? = 3
+			// let result = a.map { $0 * $0 }
+			Integer a = 3;
+			Integer result = map(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(Integer t) {
+					return t * t;
+				}
+			});
+			assertEquals(new Integer(9), result);
+		}
+
+		{
+			// let a: Int? = nil
+			// let result = a.map { $0 * $0 }
+			Integer a = null;
+			Integer result = map(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(Integer t) {
+					return t * t;
+				}
+			});
+			assertEquals(null, result);
 		}
 	}
 
@@ -199,6 +226,16 @@ public class SwiftTest {
 				fail("Must throw an exception.");
 			} catch (NoSuchElementException e) {
 			}
+		}
+	}
+
+	@Test
+	public void testPlus() {
+		{
+			// let result = [2, 3] + [5, 7, 11]
+			List<Integer> result = plus(Arrays.asList(2, 3),
+					Arrays.asList(5, 7, 11));
+			assertEquals(Arrays.asList(2, 3, 5, 7, 11), result);
 		}
 	}
 

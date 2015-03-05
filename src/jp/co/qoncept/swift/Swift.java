@@ -32,6 +32,10 @@ public class Swift {
 		return map(source.entrySet(), transform);
 	}
 
+	public static <T, R> R map(T x, Function<? super T, ? extends R> f) {
+		return x == null ? null : f.apply(x);
+	}
+
 	public static <T> List<T> filter(Iterable<? extends T> source,
 			final Predicate<? super T> includeElement) {
 		return reduce(source, new ArrayList<T>(),
@@ -99,6 +103,14 @@ public class Swift {
 				};
 			}
 		};
+	}
+
+	public static <T> List<T> plus(List<T> lhs, List<T> rhs) {
+		List<T> result = new ArrayList<T>(lhs.size() + rhs.size());
+		result.addAll(lhs);
+		result.addAll(rhs);
+
+		return result;
 	}
 
 	public static <T> T as(Object object, Class<T> clazz)

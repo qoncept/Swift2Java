@@ -49,6 +49,55 @@ Integer result = map(a, new Function<Integer, Integer>() {
 });
 ```
 
+### flatMap
+
+#### Array
+
+```swift
+// Swift
+let result: [Int] = [[2], [3, 5], [7, 11, 13]].flatMap { $0 }
+```
+
+```java
+// Java
+List<Integer> result = flatMap(
+        Arrays.asList(Arrays.asList(2), Arrays.asList(3, 5),
+                Arrays.asList(7, 11, 13)),
+        new Function<List<Integer>, List<Integer>>() {
+            @Override
+            public List<Integer> apply(List<Integer> t) {
+                return t;
+            }
+        });
+```
+
+#### Optional
+
+```swift
+// Swift
+let a: Int? = 2
+let b: Int? = 3
+let result: Int? = a.flatMap { a0 in b.flatMap { b0 in a0 + b0 } }
+```
+
+```java
+// Java
+Integer a = 2;
+Integer b = 3;
+
+Integer result = flatMap(a, new Function<Integer, Integer>() {
+    @Override
+    public Integer apply(final Integer a0) {
+        return flatMap(b, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer b0) {
+                return a0 + b0;
+            }
+        });
+    }
+});
+```
+
 ### filter
 
 ```swift
@@ -305,6 +354,18 @@ let r = s ?? "xyz"
 // Java
 String s = null;
 String r = qq(s, "xyz"); // "xyz"
+```
+
+### Array (initializer)
+
+```swift
+// Swift
+let result = Array(count: 3, repeatedValue: 5)
+```
+
+```java
+// Java
+List<Integer> result = array(3, 5);
 ```
 
 License

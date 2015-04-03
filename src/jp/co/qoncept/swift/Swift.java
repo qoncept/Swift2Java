@@ -36,6 +36,23 @@ public class Swift {
 		return x == null ? null : f.apply(x);
 	}
 
+	public static <T, R> List<R> flatMap(Iterable<? extends T> source,
+			Function<? super T, ? extends List<R>> transform) {
+		return reduce(map(source, transform), new ArrayList<R>(),
+				new BiFunction<List<R>, List<R>, List<R>>() {
+					@Override
+					public List<R> apply(List<R> l, List<R> r) {
+						l.addAll(r);
+						return l;
+					}
+				});
+	}
+
+	public static <T, R> R flatMap(T source,
+			Function<? super T, ? extends R> transform) {
+		return map(source, transform);
+	}
+
 	public static <T> List<T> filter(Iterable<? extends T> source,
 			final Predicate<? super T> includeElement) {
 		return reduce(source, new ArrayList<T>(),
@@ -153,5 +170,14 @@ public class Swift {
 
 	public static <T> T qq(T a, T b) {
 		return a != null ? a : b;
+	}
+
+	public static <T> List<T> array(int count, T repeatedValue) {
+		List<T> result = new ArrayList<T>(count);
+		for (int i = 0; i < count; i++) {
+			result.add(repeatedValue);
+		}
+
+		return result;
 	}
 }

@@ -1,9 +1,11 @@
 package jp.co.qoncept.swift;
 
+import static jp.co.qoncept.swift.Swift.array;
 import static jp.co.qoncept.swift.Swift.as;
 import static jp.co.qoncept.swift.Swift.asq;
 import static jp.co.qoncept.swift.Swift.enumerate;
 import static jp.co.qoncept.swift.Swift.filter;
+import static jp.co.qoncept.swift.Swift.flatMap;
 import static jp.co.qoncept.swift.Swift.is;
 import static jp.co.qoncept.swift.Swift.map;
 import static jp.co.qoncept.swift.Swift.plus;
@@ -96,6 +98,110 @@ public class SwiftTest {
 				}
 			});
 			assertEquals(null, result);
+		}
+	}
+
+	@Test
+	public void testFlatMap() {
+		{
+			// let result: [Int] = [[2], [3, 5], [7, 11, 13]].flatMap { $0 }
+			List<Integer> result = flatMap(
+					Arrays.asList(Arrays.asList(2), Arrays.asList(3, 5),
+							Arrays.asList(7, 11, 13)),
+					new Function<List<Integer>, List<Integer>>() {
+						@Override
+						public List<Integer> apply(List<Integer> t) {
+							return t;
+						}
+					});
+			assertEquals(result, Arrays.asList(2, 3, 5, 7, 11, 13));
+		}
+
+		{
+			// let result: [Int] = [1, 2, 3].flatMap { [Int](count: $0, repeatedValue: $0) }
+			List<Integer> result = flatMap(Arrays.asList(1, 2, 3),
+					new Function<Integer, List<Integer>>() {
+						@Override
+						public List<Integer> apply(Integer t) {
+							return array(t, t);
+						}
+					});
+			assertEquals(result, Arrays.asList(1, 2, 2, 3, 3, 3));
+		}
+
+		{
+			// let a: Int? = 2
+			// let b: Int? = 3
+			// let result: Int? = a.flatMap { a0 in b.flatMap { b0 in a0 + b0 } }
+			Integer a = 2;
+			Integer b = 3;
+
+			Integer result = flatMap(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(final Integer a0) {
+					return flatMap(b, new Function<Integer, Integer>() {
+						@Override
+						public Integer apply(Integer b0) {
+							return a0 + b0;
+						}
+					});
+				}
+			});
+			assertEquals(result, new Integer(5));
+		}
+
+		{
+			Integer a = null;
+			Integer b = 3;
+
+			Integer result = flatMap(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(final Integer a0) {
+					return flatMap(b, new Function<Integer, Integer>() {
+						@Override
+						public Integer apply(Integer b0) {
+							return a0 + b0;
+						}
+					});
+				}
+			});
+			assertNull(result);
+		}
+
+		{
+			Integer a = 2;
+			Integer b = null;
+
+			Integer result = flatMap(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(final Integer a0) {
+					return flatMap(b, new Function<Integer, Integer>() {
+						@Override
+						public Integer apply(Integer b0) {
+							return a0 + b0;
+						}
+					});
+				}
+			});
+			assertNull(result);
+		}
+
+		{
+			Integer a = null;
+			Integer b = null;
+
+			Integer result = flatMap(a, new Function<Integer, Integer>() {
+				@Override
+				public Integer apply(final Integer a0) {
+					return flatMap(b, new Function<Integer, Integer>() {
+						@Override
+						public Integer apply(Integer b0) {
+							return a0 + b0;
+						}
+					});
+				}
+			});
+			assertNull(result);
 		}
 	}
 
@@ -372,6 +478,15 @@ public class SwiftTest {
 			String s = null;
 			String r = qq(s, "xyz");
 			assertEquals("xyz", r);
+		}
+	}
+
+	@Test
+	public void testArray() {
+		{
+			// let result = Array(count: 3, repeatedValue: 5)
+			List<Integer> result = array(3, 5);
+			assertEquals(Arrays.asList(5, 5, 5), result);
 		}
 	}
 

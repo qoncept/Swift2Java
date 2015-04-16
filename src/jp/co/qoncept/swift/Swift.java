@@ -122,6 +122,24 @@ public class Swift {
 		};
 	}
 
+	public static <T> String join(String separator,
+			Iterable<? extends T> elements) {
+		StringBuilder builder = new StringBuilder();
+
+		boolean first = true;
+		for (T element : elements) {
+			if (first) {
+				first = false;
+			} else {
+				builder.append(separator);
+			}
+
+			builder.append(element.toString());
+		}
+
+		return builder.toString();
+	}
+
 	public static <T> List<T> plus(List<T> lhs, List<T> rhs) {
 		List<T> result = new ArrayList<T>(lhs.size() + rhs.size());
 		result.addAll(lhs);

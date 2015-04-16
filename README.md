@@ -152,6 +152,18 @@ for (Tuple2<Integer, ? extends String> indexAndElement : enumerate(Arrays
 }
 ```
 
+### join
+
+```swift
+// Swift
+let result = ", ".join(["A", "B", "C"])
+```
+
+```java
+// Java
+String result = join(", ", Arrays.asList("A", "B", "C"));
+```
+
 ### +
 
 ```swift

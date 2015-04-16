@@ -7,6 +7,7 @@ import static jp.co.qoncept.swift.Swift.enumerate;
 import static jp.co.qoncept.swift.Swift.filter;
 import static jp.co.qoncept.swift.Swift.flatMap;
 import static jp.co.qoncept.swift.Swift.is;
+import static jp.co.qoncept.swift.Swift.join;
 import static jp.co.qoncept.swift.Swift.map;
 import static jp.co.qoncept.swift.Swift.plus;
 import static jp.co.qoncept.swift.Swift.q;
@@ -332,6 +333,21 @@ public class SwiftTest {
 				fail("Must throw an exception.");
 			} catch (NoSuchElementException e) {
 			}
+		}
+	}
+
+	@Test
+	public void testJoin() {
+		{
+			// let result = ", ".join(["A", "B", "C"])
+			String result = join(", ", Arrays.asList("A", "B", "C"));
+			assertEquals("A, B, C", result);
+		}
+
+		{
+			// let result = ", ".join([])
+			String result = join(", ", Collections.emptyList());
+			assertEquals("", result);
 		}
 	}
 
